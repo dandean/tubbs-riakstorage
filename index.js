@@ -47,7 +47,8 @@ function RiakStorage(config) {
  *
  * Provides an Array of all records in the dataset.
 **/
-RiakStorage.prototype.all = function(cb) {
+RiakStorage.prototype.all = all;
+function all(cb) {
   var result = [];
   var Type = this.DataType;
 
@@ -70,7 +71,8 @@ RiakStorage.prototype.all = function(cb) {
  *
  * Finds a single record in the database.
 **/
-RiakStorage.prototype.find = function(id, cb) {
+RiakStorage.prototype.find = find;
+function find(id, cb) {
   var Type = this.DataType;
   var bucket = this.bucket;
 
@@ -95,7 +97,8 @@ RiakStorage.prototype.find = function(id, cb) {
  *
  * Provides an Array of all records which pass the `filter`.
 **/
-RiakStorage.prototype.where = function(args, filter, cb) {
+RiakStorage.prototype.where = where;
+function where(args, filter, cb) {
   var Type = this.DataType;
   var bucket = this.bucket;
   var result = [];
@@ -130,7 +133,8 @@ RiakStorage.prototype.where = function(args, filter, cb) {
  *
  * Saves the provides object to the database.
 **/
-RiakStorage.prototype.save = function(record, cb) {
+RiakStorage.prototype.save = save;
+function save(record, cb) {
   var Type = this.DataType;
   var bucket = this.bucket;
 
