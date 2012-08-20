@@ -1,5 +1,5 @@
 {
-  "name": "tubbs-riak",
+  "name": "tubbs-riakstorage",
   "version": "0.0.0",
   "description": "Riak adaptor for Tubbs",
   "main": "index.js",

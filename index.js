@@ -1,9 +1,16 @@
 var guid = require("guid");
 var riak = require('riak-js');
 
-function createError(type, message) {
+/**
+ * createError(name, message) -> Error
+ * - name (String): Name of the error, such as 'ArgumentError'.
+ * - message (String): Error message.
+ *
+ * Creates a named error for better error handling.
+**/
+function createError(name, message) {
   var error = new Error(message);
-  error.name = type;
+  error.name = name;
   return error;
 }
 
@@ -14,7 +21,7 @@ var defaults = {
 };
 
 /**
- * new Riak(config)
+ * new RiakStorage(config)
  * - config (Object): Object hash of configuration options.
  *
  * **Options**
@@ -23,7 +30,7 @@ var defaults = {
  * - port: (Number): Optional, riak's http port. Defaults to 8098.
  * - debug: (Boolean): Optional, if debug messages should print. Defaults to `true`.
 **/
-function Riak(config) {
+function RiakStorage(config) {
   if (!config.bucket) throw new Error('The "bucket" option is required.');
 
   this.bucket = config.bucket;
@@ -36,11 +43,11 @@ function Riak(config) {
 }
 
 /**
- * Riak#all(callback(e, result))
+ * RiakStorage#all(callback(e, result))
  *
  * Provides an Array of all records in the dataset.
 **/
-Riak.prototype.all = function(cb) {
+RiakStorage.prototype.all = function(cb) {
   var result = [];
   var Type = this.DataType;
 
@@ -58,12 +65,12 @@ Riak.prototype.all = function(cb) {
 };
 
 /**
- * Riak#find(id, callback(e, result))
+ * RiakStorage#find(id, callback(e, result))
  * - id (?): The record ID in the database
  *
  * Finds a single record in the database.
 **/
-Riak.prototype.find = function(id, cb) {
+RiakStorage.prototype.find = function(id, cb) {
   var Type = this.DataType;
   var bucket = this.bucket;
 
@@ -81,14 +88,14 @@ Riak.prototype.find = function(id, cb) {
 };
 
 /**
- * Riak#where(args, filter, callback(e, result))
+ * RiakStorage#where(args, filter, callback(e, result))
  * - args (Object): An object hash of named arguments which becomes the 2nd arg passed to `filter`.
  * - filter (Function): A function executed against each document which returns
  * `true` if the document should be included in the result.
  *
  * Provides an Array of all records which pass the `filter`.
 **/
-Riak.prototype.where = function(args, filter, cb) {
+RiakStorage.prototype.where = function(args, filter, cb) {
   var Type = this.DataType;
   var bucket = this.bucket;
   var result = [];
@@ -98,7 +105,7 @@ Riak.prototype.where = function(args, filter, cb) {
   args.__filter = filter;
   
   var filterRoutine = function(value, keyData, arg) {
-    var record = Riak.mapValuesJson(value)[0];
+    var record = riak.mapValuesJson(value)[0];
     var f = new Function("doc", "args", arg.__filter);
     return (f(record, arg)) ? [record] : [];
   };
@@ -118,12 +125,12 @@ Riak.prototype.where = function(args, filter, cb) {
 };
 
 /**
- * Riak#save(record, callback(e, result))
+ * RiakStorage#save(record, callback(e, result))
  * - record (Object): An object (or JSON serializable object) to be saved to the database.
  *
  * Saves the provides object to the database.
 **/
-Riak.prototype.save = function(record, cb) {
+RiakStorage.prototype.save = function(record, cb) {
   var Type = this.DataType;
   var bucket = this.bucket;
 
@@ -138,12 +145,12 @@ Riak.prototype.save = function(record, cb) {
 };
 
 /**
- * Riak#delete(record, callback(e, result))
+ * RiakStorage#delete(record, callback(e, result))
  * - record (Object): An object (or JSON serializable object) to be deleted from the database.
  *
  * Deletes the provides object from the database.
 **/
-Riak.prototype.delete = function(record, cb) {
+RiakStorage.prototype.delete = function(record, cb) {
   var Type = this.DataType;
   var bucket = this.bucket;
   
@@ -160,4 +167,4 @@ Riak.prototype.delete = function(record, cb) {
   });
 };
 
-module.exports = Riak;
+module.exports = RiakStorage;
