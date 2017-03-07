@@ -20,7 +20,7 @@
   "author": "Dan Dean",
   "license": "MIT",
   "dependencies": {
-    "guid": "*",
+    "guid": ">=0.0.12",
     "riak-js": "*"
   },
   "devDependencies": {
