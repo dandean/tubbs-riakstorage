@@ -24,6 +24,6 @@
     "riak-js": "*"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": ">=4.0.1"
   }
 }
